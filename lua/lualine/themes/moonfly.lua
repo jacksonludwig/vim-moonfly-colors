@@ -26,32 +26,34 @@ local colors = {
   color2 = '#c6c6c6',
 }
 
+local colorAll = '#626262' -- match signcol color
+
 -- LuaFormatter on
 return {
   normal = {
-    a = {fg = colors.color6, bg = colors.color1},
-    b = {fg = colors.color1, bg = colors.color0},
-    c = {fg = colors.color8, bg = colors.color0}
+    a = {fg = colorAll, bg = colors.color1},
+    b = {fg = colorAll, bg = colors.color0},
+    c = {fg = colorAll, bg = colors.color0}
   },
   insert = {
-    a = {fg = colors.color6, bg = colors.color2},
-    b = {fg = colors.color2, bg = colors.color0}
+    a = {fg = colorAll, bg = colors.color2},
+    b = {fg = colorAll, bg = colors.color0}
   },
   visual = {
-    a = {fg = colors.color6, bg = colors.color3},
-    b = {fg = colors.color3, bg = colors.color0}
+    a = {fg = colorAll, bg = colors.color3},
+    b = {fg = colorAll, bg = colors.color0}
   },
   command = {
-    a = {fg = colors.color6, bg = colors.color4},
-    b = {fg = colors.color4, bg = colors.color0}
+    a = {fg = colorAll, bg = colors.color4},
+    b = {fg = colorAll, bg = colors.color0}
   },
   replace = {
-    a = {fg = colors.color6, bg = colors.color5},
-    b = {fg = colors.color5, bg = colors.color0}
+    a = {fg = colorAll, bg = colors.color5},
+    b = {fg = colorAll, bg = colors.color0}
   },
   inactive = {
-    a = {fg = colors.color7, bg = colors.color0},
-    b = {fg = colors.color7, bg = colors.color0},
-    c = {fg = colors.color7, bg = colors.color0}
+    a = {fg = colorAll, bg = colors.color0},
+    b = {fg = colorAll, bg = colors.color0},
+    c = {fg = colorAll, bg = colors.color0}
   },
 }
