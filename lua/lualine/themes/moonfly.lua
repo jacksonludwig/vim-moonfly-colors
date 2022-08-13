@@ -6,7 +6,8 @@
 -- LuaFormatter off
 local colors = {
   -- StatusLine background color.
-  color0 = '#303030',
+  -- color0 = '#303030',
+  color0 = '#080808', -- match bg color
 
   -- Mode colors.
   color1 = '#80a0ff',
