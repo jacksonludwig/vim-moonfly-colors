@@ -227,7 +227,7 @@ exec 'highlight IncSearch ctermbg=bg ctermfg=' . s:yellow.term . ' guibg=bg guif
 highlight! link Special MoonflyCranberry
 
 " if, else
-exec 'highlight Statement ctermfg=' . s:violet.term . ' guifg=' . s:violet.hex . ' gui=none'
+exec 'highlight Statement ctermfg=' . s:violet.term . ' guifg=' . s:violet.hex . ' gui=bold'
 
 " struct, union, enum, typedef
 highlight! link Structure MoonflyBlue
