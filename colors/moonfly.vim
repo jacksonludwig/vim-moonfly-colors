@@ -220,8 +220,9 @@ highlight! link Operator MoonflyCranberry
 highlight! link Repeat MoonflyViolet
 
 " Search
-exec 'highlight Search ctermbg=bg ctermfg=' . s:coral.term . ' cterm=reverse guibg=bg guifg=' . s:coral.hex . ' gui=reverse'
-exec 'highlight IncSearch ctermbg=bg ctermfg=' . s:yellow.term . ' guibg=bg guifg=' . s:yellow.hex
+exec 'highlight Search ctermbg=' . s:grey241.term . ' ctermfg=' . s:grey254.term . ' cterm=none guibg=' . s:grey241.hex . ' guifg=' . s:grey254.hex . ' gui=none'
+exec 'highlight CurSearch ctermbg=' . s:coral.term . ' ctermfg=bg cterm=none guibg=' . s:coral.hex . ' guifg=bg gui=none'
+exec 'highlight IncSearch ctermbg=' . s:yellow.term . ' ctermfg=bg cterm=none guibg=' . s:yellow.hex . ' guifg=bg gui=none'
 
 " '\n' sequences
 highlight! link Special MoonflyCranberry
@@ -301,7 +302,7 @@ exec 'highlight CursorLine ctermbg=' . s:grey234.term . ' cterm=none guibg=' . s
 exec 'highlight Folded ctermbg=' . s:grey234.term . ' ctermfg=' . s:lime.term . ' guibg=' . s:grey234.hex . ' guifg='. s:lime.hex
 exec 'highlight FoldColumn ctermbg=' . s:grey236.term . ' ctermfg=' . s:lime.term . ' guibg=' . s:grey236.hex . ' guifg=' . s:lime.hex
 exec 'highlight SignColumn ctermbg=bg ctermfg=' . s:lime.term . ' guibg=bg guifg=' . s:lime.hex
-exec 'highlight Todo ctermbg=' . s:yellow.term . ' ctermfg=' . s:black.term . ' guibg=' . s:yellow.hex . ' guifg=' . s:black.hex
+exec 'highlight Todo ctermbg=' . s:grey235.term . ' ctermfg=' . s:yellow.term . ' guibg=' . s:grey235.hex . ' guifg=' . s:yellow.hex
 exec 'highlight SpecialKey ctermbg=bg ctermfg=' . s:sky.term . ' guibg=bg guifg=' . s:sky.hex
 if g:moonflyUnderlineMatchParen
     exec 'highlight MatchParen ctermbg=bg cterm=underline guibg=bg gui=underline'
@@ -970,7 +971,8 @@ if has('nvim')
     " Telescope plugin
     highlight! link TelescopeBorder MoonflyGrey236
     highlight! link TelescopeMatching MoonflyCoral
-    highlight! link TelescopeMultiSelection MoonflyCrimson
+    highlight! link TelescopeMultiIcon MoonflyCrimson
+    highlight! link TelescopeMultiSelection MoonflyEmerald
     highlight! link TelescopeNormal MoonflyGrey249
     highlight! link TelescopePreviewDate MoonflyGrey246
     highlight! link TelescopePreviewGroup MoonflyGrey246
@@ -990,6 +992,7 @@ if has('nvim')
     " gitsigns.nvim plugin
     highlight! link GitSignsAdd MoonflyEmeraldAlert
     highlight! link GitSignsAddLn MoonflyGreen
+    highlight! link GitSignsAddPreview MoonflyEmeraldLine
     highlight! link GitSignsChange MoonflyYellowAlert
     highlight! link GitSignsChangeDelete MoonflyCoralAlert
     highlight! link GitSignsChangeLn MoonflyYellow
