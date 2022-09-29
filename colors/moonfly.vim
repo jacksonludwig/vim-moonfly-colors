@@ -334,6 +334,11 @@ if has('nvim')
     exec 'highlight WinBar ctermbg=' . s:grey235.term . '  ctermfg=' . s:white.term . ' cterm=none guibg=' . s:grey235.hex . ' guifg=' . s:white.hex . ' gui=none'
     exec 'highlight WinBarNC ctermbg=' . s:grey235.term . ' ctermfg=' . s:grey247.term . ' cterm=none guibg=' . s:grey235.hex . ' guifg=' . s:grey247.hex . ' gui=none'
     highlight! link WinSeparator VertSplit
+    " When cmdheight is 0 then use StatusLine colors for the commandline since
+    " the commandline will actually use the statusline area.
+    if &cmdheight == 0
+        highlight! link MsgArea StatusLine
+    endif
 
     " Neovim Treesitter
     highlight! link TSAnnotation MoonflyViolet
@@ -353,15 +358,29 @@ if has('nvim')
     highlight! link TSTag MoonflyBlue
     highlight! link TSTagDelimiter MoonflyLime
     highlight! link TSVariableBuiltin MoonflyLime
-    highlight! link bashTSParameter MoonflyTurquoise
-    highlight! link cssTSPunctDelimiter MoonflyCranberry
-    highlight! link cssTSType MoonflyBlue
-    highlight! link scssTSPunctDelimiter MoonflyCranberry
-    highlight! link scssTSType MoonflyBlue
-    highlight! link scssTSVariable MoonflyTurquoise
-    highlight! link vimTSVariable MoonflyTurquoise
-    highlight! link yamlTSField MoonflySky
-    highlight! link yamlTSPunctDelimiter MoonflyCranberry
+    if has('nvim-0.8')
+        highlight! link @parameter.bash MoonflyTurquoise
+        highlight! link @punctDelimiter.css MoonflyCranberry
+        highlight! link @type.css MoonflyBlue
+        highlight! link @punctuation.delimiter.scss MoonflyCranberry
+        highlight! link @type.scss MoonflyBlue
+        highlight! link @variable.scss MoonflyTurquoise
+        highlight! link @variable.vim MoonflyTurquoise
+        highlight! link @variable.builtin.vim MoonflyEmerald
+        highlight! link @field.yaml MoonflyBlue
+        highlight! link @punctuation.delimiter.yaml MoonflyCranberry
+    else
+        highlight! link bashTSParameter MoonflyTurquoise
+        highlight! link cssTSPunctDelimiter MoonflyCranberry
+        highlight! link cssTSType MoonflyBlue
+        highlight! link scssTSPunctDelimiter MoonflyCranberry
+        highlight! link scssTSType MoonflyBlue
+        highlight! link scssTSVariable MoonflyTurquoise
+        highlight! link vimTSVariable MoonflyTurquoise
+        highlight! link vimTSVariableBuiltin MoonflyEmerald
+        highlight! link yamlTSField MoonflySky
+        highlight! link yamlTSPunctDelimiter MoonflyCranberry
+    endif
 endif
 
 " C/C++
