@@ -319,6 +319,12 @@ exec 'highlight ColorColumn ctermbg=' . s:grey233.term . ' guibg=' . s:grey233.h
 " Conceal color
 exec 'highlight Conceal ctermbg=NONE ctermfg=' . s:grey249.term . ' guibg=NONE guifg=' . s:grey249.hex
 
+" vimdiff/nvim -d
+exec 'highlight DiffAdd ctermbg=' . s:emerald.term . ' ctermfg=' . s:black.term . ' guibg=' . s:emerald.hex . ' guifg=' . s:black.hex
+exec 'highlight DiffChange ctermbg=' . s:grey236.term . ' guibg=' . s:grey236.hex
+exec 'highlight DiffDelete ctermbg=' . s:grey236.term . ' ctermfg=' . s:grey241.term . ' guibg=' . s:grey236.hex . ' guifg=' . s:grey241.hex ' gui=none'
+exec 'highlight DiffText ctermbg=' . s:blue.term . ' ctermfg=' . s:black.term . ' guibg=' . s:blue.hex . ' guifg=' . s:black.hex . ' gui=none'
+
 " Neovim only highlight groups
 if has('nvim')
     exec 'highlight Whitespace ctermfg=' . s:grey0.term . ' guifg=' . s:grey0.hex
@@ -332,11 +338,6 @@ if has('nvim')
     exec 'highlight WinBar ctermbg=' . s:grey235.term . '  ctermfg=' . s:white.term . ' cterm=none guibg=' . s:grey235.hex . ' guifg=' . s:white.hex . ' gui=none'
     exec 'highlight WinBarNC ctermbg=' . s:grey235.term . ' ctermfg=' . s:grey247.term . ' cterm=none guibg=' . s:grey235.hex . ' guifg=' . s:grey247.hex . ' gui=none'
     highlight! link WinSeparator VertSplit
-    " When cmdheight is 0 then use StatusLine colors for the commandline since
-    " the commandline will actually use the statusline area.
-    if &cmdheight == 0
-        highlight! link MsgArea StatusLine
-    endif
 
     " Neovim Treesitter
     highlight! link TSAnnotation MoonflyViolet
@@ -345,6 +346,7 @@ if has('nvim')
     highlight! link TSConstBuiltin MoonflyGreen
     highlight! link TSConstMacro MoonflyViolet
     highlight! link TSConstructor MoonflyEmerald
+    highlight! link TSDanger Todo
     highlight! link TSFuncBuiltin MoonflySky
     highlight! link TSFuncMacro MoonflySky
     highlight! link TSInclude MoonflyCranberry
@@ -379,29 +381,250 @@ if has('nvim')
         highlight! link yamlTSField MoonflySky
         highlight! link yamlTSPunctDelimiter MoonflyCranberry
     endif
+
+    " Neovim Diagnostic
+    highlight! link DiagnosticError MoonflyRed
+    highlight! link DiagnosticWarn MoonflyYellow
+    highlight! link DiagnosticInfo MoonflySky
+    highlight! link DiagnosticHint MoonflyWhite
+    if g:moonflyUndercurls
+        exec 'highlight DiagnosticUnderlineError ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:red.hex
+        exec 'highlight DiagnosticUnderlineWarn ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:yellow.hex
+        exec 'highlight DiagnosticUnderlineInfo ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:sky.hex
+        exec 'highlight DiagnosticUnderlineHint ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:white.hex
+    else
+        exec 'highlight DiagnosticUnderlineError ctermbg=NONE guibg=NONE gui=underline guisp=' . s:red.hex
+        exec 'highlight DiagnosticUnderlineWarn ctermbg=NONE guibg=NONE gui=underline guisp=' . s:blue.hex
+        exec 'highlight DiagnosticUnderlineInfo ctermbg=NONE guibg=NONE gui=underline guisp=' . s:yellow.hex
+        exec 'highlight DiagnosticUnderlineHint ctermbg=NONE guibg=NONE gui=underline guisp=' . s:sky.hex
+    endif
+    highlight! link DiagnosticVirtualTextError MoonflyGrey241
+    highlight! link DiagnosticVirtualTextWarn MoonflyGrey241
+    highlight! link DiagnosticVirtualTextInfo MoonflyGrey241
+    highlight! link DiagnosticVirtualTextHint MoonflyGrey241
+    highlight! link DiagnosticSignError MoonflyRedAlert
+    highlight! link DiagnosticSignWarn MoonflyYellowAlert
+    highlight! link DiagnosticSignInfo MoonflySkyAlert
+    highlight! link DiagnosticSignHint MoonflyWhiteAlert
+    highlight! link DiagnosticFloatingError MoonflyRed
+    highlight! link DiagnosticFloatingWarn MoonflyYellow
+    highlight! link DiagnosticFloatingInfo MoonflySky
+    highlight! link DiagnosticFloatingHint MoonflyWhite
+    highlight! link LspSignatureActiveParameter MoonflyVisual
 endif
 
-" C/C++
-highlight! link cDefine MoonflyViolet
-highlight! link cPreCondit MoonflyViolet
-highlight! link cStatement MoonflyViolet
-highlight! link cStructure MoonflyCoral
-highlight! link cppAccess MoonflyLime
-highlight! link cppCast MoonflyTurquoise
-highlight! link cppCustomClass MoonflyTurquoise
-highlight! link cppExceptions MoonflyLime
-highlight! link cppModifier MoonflyViolet
-highlight! link cppOperator MoonflyGreen
-highlight! link cppStatement MoonflyTurquoise
-highlight! link cppSTLconstant MoonflyBlue
-highlight! link cppSTLnamespace MoonflyBlue
-highlight! link cppStructure MoonflyViolet
+" Neovim 0.8 provides builtin Treesitter support for C, Lua and Vimscript,
+" hence, only setup old-school regex highlight groups for Vim and Neovim
+" versions prior to 0.8.
+if !has('nvim-0.8')
+    " C
+    highlight! link cDefine MoonflyViolet
+    highlight! link cPreCondit MoonflyViolet
+    highlight! link cStatement MoonflyViolet
+    highlight! link cStructure MoonflyCoral
 
-" C#
-highlight! link csModifier MoonflyLime
-highlight! link csPrecondit MoonflyViolet
-highlight! link csStorage MoonflyViolet
-highlight! link csXmlTag MoonflyBlue
+    " Lua
+    highlight! link luaBraces MoonflyCranberry
+    highlight! link luaBuiltin MoonflyGreen
+    highlight! link luaFuncCall MoonflySky
+    highlight! link luaSpecialTable MoonflySky
+
+    " Vimscript
+    highlight! link vimBracket MoonflySky
+    highlight! link vimCommand MoonflyViolet
+    highlight! link vimCommentTitle MoonflyViolet
+    highlight! link vimEnvvar MoonflyCrimson
+    highlight! link vimFuncName MoonflySky
+    highlight! link vimFuncSID MoonflySky
+    highlight! link vimFunction MoonflySky
+    highlight! link vimHighlight MoonflySky
+    highlight! link vimNotFunc MoonflyViolet
+    highlight! link vimNotation MoonflySky
+    highlight! link vimOption MoonflyTurquoise
+    highlight! link vimParenSep MoonflyWhite
+    highlight! link vimSep MoonflyWhite
+    highlight! link vimUserFunc MoonflySky
+endif
+
+" With Neovim 0.6 (and later) it is best to use the Nvim Treesitter plugin to
+" style the most common languages, hence, only setup old-school regex highlight
+" groups for Vim and Neovim versions prior to 0.6.
+if !has('nvim-0.6')
+    " C++
+    highlight! link cppAccess MoonflyLime
+    highlight! link cppCast MoonflyTurquoise
+    highlight! link cppCustomClass MoonflyTurquoise
+    highlight! link cppExceptions MoonflyLime
+    highlight! link cppModifier MoonflyViolet
+    highlight! link cppOperator MoonflyGreen
+    highlight! link cppStatement MoonflyTurquoise
+    highlight! link cppSTLconstant MoonflyBlue
+    highlight! link cppSTLnamespace MoonflyBlue
+    highlight! link cppStructure MoonflyViolet
+
+    " C#
+    highlight! link csModifier MoonflyLime
+    highlight! link csPrecondit MoonflyViolet
+    highlight! link csStorage MoonflyViolet
+    highlight! link csXmlTag MoonflyBlue
+
+    " Go
+    highlight! link goBuiltins MoonflySky
+    highlight! link goConditional MoonflyViolet
+    highlight! link goDeclType MoonflyGreen
+    highlight! link goDirective MoonflyCranberry
+    highlight! link goFloats MoonflyPurple
+    highlight! link goFunction MoonflyBlue
+    highlight! link goFunctionCall MoonflySky
+    highlight! link goImport MoonflyCranberry
+    highlight! link goLabel MoonflyYellow
+    highlight! link goMethod MoonflySky
+    highlight! link goMethodCall MoonflySky
+    highlight! link goPackage MoonflyViolet
+    highlight! link goSignedInts MoonflyEmerald
+    highlight! link goStruct MoonflyCoral
+    highlight! link goStructDef MoonflyCoral
+    highlight! link goUnsignedInts MoonflyPurple
+
+    " Java
+    highlight! link javaAnnotation MoonflyLime
+    highlight! link javaBraces MoonflyWhite
+    highlight! link javaClassDecl MoonflyYellow
+    highlight! link javaCommentTitle MoonflyGrey247
+    highlight! link javaConstant MoonflySky
+    highlight! link javaDebug MoonflySky
+    highlight! link javaMethodDecl MoonflyYellow
+    highlight! link javaOperator MoonflyCrimson
+    highlight! link javaScopeDecl MoonflyViolet
+    highlight! link javaStatement MoonflyTurquoise
+
+    " JavaScript, 'pangloss/vim-javascript' plugin
+    highlight! link jsClassDefinition MoonflyEmerald
+    highlight! link jsClassKeyword MoonflyOrange
+    highlight! link jsFrom MoonflyCoral
+    highlight! link jsFuncBlock MoonflyTurquoise
+    highlight! link jsFuncCall MoonflySky
+    highlight! link jsFunction MoonflyLime
+    highlight! link jsGlobalObjects MoonflyEmerald
+    highlight! link jsModuleAs MoonflyCoral
+    highlight! link jsObjectKey MoonflySky
+    highlight! link jsObjectValue MoonflyEmerald
+    highlight! link jsOperator MoonflyViolet
+    highlight! link jsStorageClass MoonflyLime
+    highlight! link jsTemplateBraces MoonflyCranberry
+    highlight! link jsTemplateExpression MoonflyTurquoise
+    highlight! link jsThis MoonflyGreen
+
+    " JSX, 'MaxMEllon/vim-jsx-pretty' plugin
+    highlight! link jsxAttrib MoonflyLime
+    highlight! link jsxClosePunct MoonflyPurple
+    highlight! link jsxComponentName MoonflyBlue
+    highlight! link jsxOpenPunct MoonflyLime
+    highlight! link jsxTagName MoonflyBlue
+
+    " Python
+    highlight! link pythonBuiltin MoonflyBlue
+    highlight! link pythonClassVar MoonflyGreen
+    highlight! link pythonCoding MoonflySky
+    highlight! link pythonImport MoonflyCranberry
+    highlight! link pythonOperator MoonflyViolet
+    highlight! link pythonRun MoonflySky
+    highlight! link pythonStatement MoonflyViolet
+
+    " Ruby
+    highlight! link erubyDelimiter MoonflyCrimson
+    highlight! link rubyAccess MoonflyYellow
+    highlight! link rubyAssertion MoonflySky
+    highlight! link rubyAttribute MoonflySky
+    highlight! link rubyBlockParameter MoonflyGreen
+    highlight! link rubyCallback MoonflySky
+    highlight! link rubyDefine MoonflyViolet
+    highlight! link rubyEntities MoonflySky
+    highlight! link rubyExceptional MoonflyCoral
+    highlight! link rubyGemfileMethod MoonflySky
+    highlight! link rubyInstanceVariable MoonflyTurquoise
+    highlight! link rubyInterpolationDelimiter MoonflyCranberry
+    highlight! link rubyMacro MoonflySky
+    highlight! link rubyModule MoonflyBlue
+    highlight! link rubyPseudoVariable MoonflyGreen
+    highlight! link rubyResponse MoonflySky
+    highlight! link rubyRoute MoonflySky
+    highlight! link rubySharpBang MoonflyGrey247
+    highlight! link rubyStringDelimiter MoonflyKhaki
+    highlight! link rubySymbol MoonflyPurple
+
+    " Rust
+    highlight! link rustAssert MoonflyGreen
+    highlight! link rustAttribute MoonflyReset
+    highlight! link rustCharacterInvalid MoonflyCranberry
+    highlight! link rustCharacterInvalidUnicode MoonflyCranberry
+    highlight! link rustCommentBlockDoc MoonflyGrey247
+    highlight! link rustCommentBlockDocError MoonflyGrey247
+    highlight! link rustCommentLineDoc MoonflyGrey247
+    highlight! link rustCommentLineDocError MoonflyGrey247
+    highlight! link rustConstant MoonflyOrange
+    highlight! link rustDerive MoonflyGreen
+    highlight! link rustEscapeError MoonflyCranberry
+    highlight! link rustFuncName MoonflyBlue
+    highlight! link rustIdentifier MoonflyBlue
+    highlight! link rustInvalidBareKeyword MoonflyCranberry
+    highlight! link rustKeyword MoonflyViolet
+    highlight! link rustLifetime MoonflyViolet
+    highlight! link rustMacro MoonflyGreen
+    highlight! link rustMacroVariable MoonflyViolet
+    highlight! link rustModPath MoonflyBlue
+    highlight! link rustObsoleteExternMod MoonflyCranberry
+    highlight! link rustObsoleteStorage MoonflyCranberry
+    highlight! link rustReservedKeyword MoonflyCranberry
+    highlight! link rustSelf MoonflyTurquoise
+    highlight! link rustSigil MoonflyTurquoise
+    highlight! link rustStorage MoonflyViolet
+    highlight! link rustStructure MoonflyViolet
+    highlight! link rustTrait MoonflyEmerald
+    highlight! link rustType MoonflyEmerald
+
+    " TypeScript (leafgarland/typescript-vim)
+    highlight! link typescriptDOMObjects MoonflyBlue
+    highlight! link typescriptFuncComma MoonflyWhite
+    highlight! link typescriptFuncKeyword MoonflyLime
+    highlight! link typescriptGlobalObjects MoonflyBlue
+    highlight! link typescriptIdentifier MoonflyGreen
+    highlight! link typescriptNull MoonflyGreen
+    highlight! link typescriptOpSymbols MoonflyViolet
+    highlight! link typescriptOperator MoonflyCrimson
+    highlight! link typescriptParens MoonflyWhite
+    highlight! link typescriptReserved MoonflyViolet
+    highlight! link typescriptStorageClass MoonflyLime
+
+    " TypeScript (HerringtonDarkholme/yats.vim)
+    highlight! link typeScriptModule MoonflyBlue
+    highlight! link typescriptAbstract MoonflyCoral
+    highlight! link typescriptArrayMethod MoonflySky
+    highlight! link typescriptArrowFuncArg MoonflyWhite
+    highlight! link typescriptBOM MoonflyEmerald
+    highlight! link typescriptBOMHistoryMethod MoonflySky
+    highlight! link typescriptBOMLocationMethod MoonflySky
+    highlight! link typescriptBOMWindowProp MoonflyGreen
+    highlight! link typescriptBraces MoonflyWhite
+    highlight! link typescriptCall MoonflyWhite
+    highlight! link typescriptClassHeritage MoonflyEmerald
+    highlight! link typescriptClassKeyword MoonflyOrange
+    highlight! link typescriptClassName MoonflyEmerald
+    highlight! link typescriptDecorator MoonflyLime
+    highlight! link typescriptDOMDocMethod MoonflySky
+    highlight! link typescriptDOMEventTargetMethod MoonflySky
+    highlight! link typescriptDOMNodeMethod MoonflySky
+    highlight! link typescriptExceptions MoonflyCrimson
+    highlight! link typescriptFuncType MoonflyWhite
+    highlight! link typescriptMathStaticMethod MoonflySky
+    highlight! link typescriptMethodAccessor MoonflyViolet
+    highlight! link typescriptObjectLabel MoonflySky
+    highlight! link typescriptParamImpl MoonflyWhite
+    highlight! link typescriptStringMethod MoonflySky
+    highlight! link typescriptTry MoonflyCrimson
+    highlight! link typescriptVariable MoonflyLime
+    highlight! link typescriptXHRMethod MoonflySky
+endif
 
 " Clojure
 highlight! link clojureDefine MoonflyViolet
@@ -476,24 +699,6 @@ highlight! link elmLetBlockDefinition MoonflyLime
 highlight! link elmTopLevelDecl MoonflyCoral
 highlight! link elmType MoonflySky
 
-" Go
-highlight! link goBuiltins MoonflySky
-highlight! link goConditional MoonflyViolet
-highlight! link goDeclType MoonflyGreen
-highlight! link goDirective MoonflyCranberry
-highlight! link goFloats MoonflyPurple
-highlight! link goFunction MoonflyBlue
-highlight! link goFunctionCall MoonflySky
-highlight! link goImport MoonflyCranberry
-highlight! link goLabel MoonflyYellow
-highlight! link goMethod MoonflySky
-highlight! link goMethodCall MoonflySky
-highlight! link goPackage MoonflyViolet
-highlight! link goSignedInts MoonflyEmerald
-highlight! link goStruct MoonflyCoral
-highlight! link goStructDef MoonflyCoral
-highlight! link goUnsignedInts MoonflyPurple
-
 " Haskell
 highlight! link haskellDecl MoonflyOrange
 highlight! link haskellDeclKeyword MoonflyOrange
@@ -525,48 +730,6 @@ else
     exec 'highlight htmlUnderlineItalic ctermbg=' . s:black.term . ' ctermfg=' . s:grey247.term . ' guibg=' . s:black.hex . ' guifg=' . s:grey247.hex
 endif
 
-" Java
-highlight! link javaAnnotation MoonflyLime
-highlight! link javaBraces MoonflyWhite
-highlight! link javaClassDecl MoonflyYellow
-highlight! link javaCommentTitle MoonflyGrey247
-highlight! link javaConstant MoonflySky
-highlight! link javaDebug MoonflySky
-highlight! link javaMethodDecl MoonflyYellow
-highlight! link javaOperator MoonflyCrimson
-highlight! link javaScopeDecl MoonflyViolet
-highlight! link javaStatement MoonflyTurquoise
-
-" JavaScript, 'pangloss/vim-javascript' plugin
-highlight! link jsClassDefinition MoonflyEmerald
-highlight! link jsClassKeyword MoonflyOrange
-highlight! link jsFrom MoonflyCoral
-highlight! link jsFuncBlock MoonflyTurquoise
-highlight! link jsFuncCall MoonflySky
-highlight! link jsFunction MoonflyLime
-highlight! link jsGlobalObjects MoonflyEmerald
-highlight! link jsModuleAs MoonflyCoral
-highlight! link jsObjectKey MoonflySky
-highlight! link jsObjectValue MoonflyEmerald
-highlight! link jsOperator MoonflyViolet
-highlight! link jsStorageClass MoonflyLime
-highlight! link jsTemplateBraces MoonflyCranberry
-highlight! link jsTemplateExpression MoonflyTurquoise
-highlight! link jsThis MoonflyGreen
-
-" JSX, 'MaxMEllon/vim-jsx-pretty' plugin
-highlight! link jsxAttrib MoonflyLime
-highlight! link jsxClosePunct MoonflyPurple
-highlight! link jsxComponentName MoonflyBlue
-highlight! link jsxOpenPunct MoonflyLime
-highlight! link jsxTagName MoonflyBlue
-
-" Lua
-highlight! link luaBraces MoonflyCranberry
-highlight! link luaBuiltin MoonflyGreen
-highlight! link luaFuncCall MoonflySky
-highlight! link luaSpecialTable MoonflySky
-
 " Markdown, 'tpope/vim-markdown' plugin
 highlight! link markdownBold MoonflyYellow
 highlight! link markdownCode MoonflyKhaki
@@ -594,67 +757,6 @@ highlight! link phpType MoonflyViolet
 highlight! link purescriptClass MoonflyOrange
 highlight! link purescriptModuleParams MoonflyCoral
 
-" Python
-highlight! link pythonBuiltin MoonflyBlue
-highlight! link pythonClassVar MoonflyGreen
-highlight! link pythonCoding MoonflySky
-highlight! link pythonImport MoonflyCranberry
-highlight! link pythonOperator MoonflyViolet
-highlight! link pythonRun MoonflySky
-highlight! link pythonStatement MoonflyViolet
-
-" Ruby
-highlight! link erubyDelimiter MoonflyCrimson
-highlight! link rubyAccess MoonflyYellow
-highlight! link rubyAssertion MoonflySky
-highlight! link rubyAttribute MoonflySky
-highlight! link rubyBlockParameter MoonflyGreen
-highlight! link rubyCallback MoonflySky
-highlight! link rubyDefine MoonflyViolet
-highlight! link rubyEntities MoonflySky
-highlight! link rubyExceptional MoonflyCoral
-highlight! link rubyGemfileMethod MoonflySky
-highlight! link rubyInstanceVariable MoonflyTurquoise
-highlight! link rubyInterpolationDelimiter MoonflyCranberry
-highlight! link rubyMacro MoonflySky
-highlight! link rubyModule MoonflyBlue
-highlight! link rubyPseudoVariable MoonflyGreen
-highlight! link rubyResponse MoonflySky
-highlight! link rubyRoute MoonflySky
-highlight! link rubySharpBang MoonflyGrey247
-highlight! link rubyStringDelimiter MoonflyKhaki
-highlight! link rubySymbol MoonflyPurple
-
-" Rust
-highlight! link rustAssert MoonflyGreen
-highlight! link rustAttribute MoonflyReset
-highlight! link rustCharacterInvalid MoonflyCranberry
-highlight! link rustCharacterInvalidUnicode MoonflyCranberry
-highlight! link rustCommentBlockDoc MoonflyGrey247
-highlight! link rustCommentBlockDocError MoonflyGrey247
-highlight! link rustCommentLineDoc MoonflyGrey247
-highlight! link rustCommentLineDocError MoonflyGrey247
-highlight! link rustConstant MoonflyOrange
-highlight! link rustDerive MoonflyGreen
-highlight! link rustEscapeError MoonflyCranberry
-highlight! link rustFuncName MoonflyBlue
-highlight! link rustIdentifier MoonflyBlue
-highlight! link rustInvalidBareKeyword MoonflyCranberry
-highlight! link rustKeyword MoonflyViolet
-highlight! link rustLifetime MoonflyViolet
-highlight! link rustMacro MoonflyGreen
-highlight! link rustMacroVariable MoonflyViolet
-highlight! link rustModPath MoonflyBlue
-highlight! link rustObsoleteExternMod MoonflyCranberry
-highlight! link rustObsoleteStorage MoonflyCranberry
-highlight! link rustReservedKeyword MoonflyCranberry
-highlight! link rustSelf MoonflyTurquoise
-highlight! link rustSigil MoonflyTurquoise
-highlight! link rustStorage MoonflyViolet
-highlight! link rustStructure MoonflyViolet
-highlight! link rustTrait MoonflyEmerald
-highlight! link rustType MoonflyEmerald
-
 " Scala (note, link highlighting does not work, I don't know why)
 exec 'highlight scalaCapitalWord ctermfg=' . s:blue.term . ' guifg=' . s:blue.hex
 exec 'highlight scalaCommentCodeBlock ctermfg=' . s:grey247.term . ' guifg=' . s:grey247.hex
@@ -669,64 +771,6 @@ highlight! link shLoop MoonflyViolet
 highlight! link shSetList MoonflyTurquoise
 highlight! link shShellVariables MoonflyLime
 highlight! link shVariable MoonflyTurquoise
-
-" TypeScript (leafgarland/typescript-vim)
-highlight! link typescriptDOMObjects MoonflyBlue
-highlight! link typescriptFuncComma MoonflyWhite
-highlight! link typescriptFuncKeyword MoonflyLime
-highlight! link typescriptGlobalObjects MoonflyBlue
-highlight! link typescriptIdentifier MoonflyGreen
-highlight! link typescriptNull MoonflyGreen
-highlight! link typescriptOpSymbols MoonflyViolet
-highlight! link typescriptOperator MoonflyCrimson
-highlight! link typescriptParens MoonflyWhite
-highlight! link typescriptReserved MoonflyViolet
-highlight! link typescriptStorageClass MoonflyLime
-
-" TypeScript (HerringtonDarkholme/yats.vim)
-highlight! link typeScriptModule MoonflyBlue
-highlight! link typescriptAbstract MoonflyCoral
-highlight! link typescriptArrayMethod MoonflySky
-highlight! link typescriptArrowFuncArg MoonflyWhite
-highlight! link typescriptBOM MoonflyEmerald
-highlight! link typescriptBOMHistoryMethod MoonflySky
-highlight! link typescriptBOMLocationMethod MoonflySky
-highlight! link typescriptBOMWindowProp MoonflyGreen
-highlight! link typescriptBraces MoonflyWhite
-highlight! link typescriptCall MoonflyWhite
-highlight! link typescriptClassHeritage MoonflyEmerald
-highlight! link typescriptClassKeyword MoonflyOrange
-highlight! link typescriptClassName MoonflyEmerald
-highlight! link typescriptDecorator MoonflyLime
-highlight! link typescriptDOMDocMethod MoonflySky
-highlight! link typescriptDOMEventTargetMethod MoonflySky
-highlight! link typescriptDOMNodeMethod MoonflySky
-highlight! link typescriptExceptions MoonflyCrimson
-highlight! link typescriptFuncType MoonflyWhite
-highlight! link typescriptMathStaticMethod MoonflySky
-highlight! link typescriptMethodAccessor MoonflyViolet
-highlight! link typescriptObjectLabel MoonflySky
-highlight! link typescriptParamImpl MoonflyWhite
-highlight! link typescriptStringMethod MoonflySky
-highlight! link typescriptTry MoonflyCrimson
-highlight! link typescriptVariable MoonflyLime
-highlight! link typescriptXHRMethod MoonflySky
-
-" Vimscript
-highlight! link vimBracket MoonflySky
-highlight! link vimCommand MoonflyViolet
-highlight! link vimCommentTitle MoonflyViolet
-highlight! link vimEnvvar MoonflyCrimson
-highlight! link vimFuncName MoonflySky
-highlight! link vimFuncSID MoonflySky
-highlight! link vimFunction MoonflySky
-highlight! link vimHighlight MoonflySky
-highlight! link vimNotFunc MoonflyViolet
-highlight! link vimNotation MoonflySky
-highlight! link vimOption MoonflyTurquoise
-highlight! link vimParenSep MoonflyWhite
-highlight! link vimSep MoonflyWhite
-highlight! link vimUserFunc MoonflySky
 
 " XML
 highlight! link xmlAttrib MoonflyLime
@@ -828,12 +872,6 @@ endif
 exec 'highlight snipLeadingSpaces ctermbg=bg ctermfg=fg guibg=bg guifg=fg'
 exec 'highlight MatchWordCur ctermbg=bg guibg=bg'
 
-" vimdiff/nvim -d
-exec 'highlight DiffAdd ctermbg=' . s:emerald.term . ' ctermfg=' . s:black.term . ' guibg=' . s:emerald.hex . ' guifg=' . s:black.hex
-exec 'highlight DiffChange ctermbg=' . s:grey236.term . ' guibg=' . s:grey236.hex
-exec 'highlight DiffDelete ctermbg=' . s:grey236.term . ' ctermfg=' . s:crimson.term . ' guibg=' . s:grey236.hex . ' guifg=' . s:crimson.hex ' gui=none'
-exec 'highlight DiffText ctermbg=' . s:blue.term . ' ctermfg=' . s:black.term . ' guibg=' . s:blue.hex . ' guifg=' . s:black.hex . ' gui=none'
-
 " ALE plugin
 if g:moonflyUndercurls
      exec 'highlight ALEError ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:red.hex
@@ -899,65 +937,6 @@ highlight! link CocUnusedHighlight MoonflyGrey249
 if !exists('g:indentLine_defaultGroup') && !exists('g:indentLine_color_gui') && !exists('g:indentLine_color_term')
     let g:indentLine_color_term = s:grey235.term
     let g:indentLine_color_gui = s:grey235.hex
-endif
-
-" Neovim diagnostics
-if has('nvim-0.6')
-    " Neovim 0.6 diagnostic
-    highlight! link DiagnosticError MoonflyRed
-    highlight! link DiagnosticWarn MoonflyYellow
-    highlight! link DiagnosticInfo MoonflySky
-    highlight! link DiagnosticHint MoonflyWhite
-    if g:moonflyUndercurls
-        exec 'highlight DiagnosticUnderlineError ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:red.hex
-        exec 'highlight DiagnosticUnderlineWarn ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:yellow.hex
-        exec 'highlight DiagnosticUnderlineInfo ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:sky.hex
-        exec 'highlight DiagnosticUnderlineHint ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:white.hex
-    else
-        exec 'highlight DiagnosticUnderlineError ctermbg=NONE guibg=NONE gui=underline guisp=' . s:red.hex
-        exec 'highlight DiagnosticUnderlineWarn ctermbg=NONE guibg=NONE gui=underline guisp=' . s:blue.hex
-        exec 'highlight DiagnosticUnderlineInfo ctermbg=NONE guibg=NONE gui=underline guisp=' . s:yellow.hex
-        exec 'highlight DiagnosticUnderlineHint ctermbg=NONE guibg=NONE gui=underline guisp=' . s:sky.hex
-    endif
-    highlight! link DiagnosticVirtualTextError MoonflyGrey241
-    highlight! link DiagnosticVirtualTextWarn MoonflyGrey241
-    highlight! link DiagnosticVirtualTextInfo MoonflyGrey241
-    highlight! link DiagnosticVirtualTextHint MoonflyGrey241
-    highlight! link DiagnosticSignError MoonflyRedAlert
-    highlight! link DiagnosticSignWarn MoonflyYellowAlert
-    highlight! link DiagnosticSignInfo MoonflySkyAlert
-    highlight! link DiagnosticSignHint MoonflyWhiteAlert
-    highlight! link DiagnosticFloatingError MoonflyRed
-    highlight! link DiagnosticFloatingWarn MoonflyYellow
-    highlight! link DiagnosticFloatingInfo MoonflySky
-    highlight! link DiagnosticFloatingHint MoonflyWhite
-    highlight! link LspSignatureActiveParameter MoonflyVisual
-elseif has('nvim-0.5')
-    " Neovim 0.5 LSP diagnostics
-    if g:moonflyUndercurls
-        exec 'highlight LspDiagnosticsUnderlineError ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:red.hex
-        exec 'highlight LspDiagnosticsUnderlineWarning ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:yellow.hex
-        exec 'highlight LspDiagnosticsUnderlineInformation ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:sky.hex
-        exec 'highlight LspDiagnosticsUnderlineHint ctermbg=NONE guibg=NONE gui=undercurl guisp=' . s:white.hex
-    else
-        exec 'highlight LspDiagnosticsUnderlineError ctermbg=NONE guibg=NONE gui=underline guisp=' . s:red.hex
-        exec 'highlight LspDiagnosticsUnderlineWarning ctermbg=NONE guibg=NONE gui=underline guisp=' . s:blue.hex
-        exec 'highlight LspDiagnosticsUnderlineInformation ctermbg=NONE guibg=NONE gui=underline guisp=' . s:yellow.hex
-        exec 'highlight LspDiagnosticsUnderlineHint ctermbg=NONE guibg=NONE gui=underline guisp=' . s:sky.hex
-    endif
-    highlight! link LspDiagnosticsVirtualTextWarning MoonflyGrey241
-    highlight! link LspDiagnosticsVirtualTextError MoonflyGrey241
-    highlight! link LspDiagnosticsVirtualTextInformation MoonflyGrey241
-    highlight! link LspDiagnosticsVirtualTextHint MoonflyGrey241
-    highlight! link LspDiagnosticsSignError MoonflyRedAlert
-    highlight! link LspDiagnosticsSignWarning MoonflyYellowAlert
-    highlight! link LspDiagnosticsSignInformation MoonflySkyAlert
-    highlight! link LspDiagnosticsSignHint MoonflyWhiteAlert
-    highlight! link LspDiagnosticsFloatingError MoonflyRed
-    highlight! link LspDiagnosticsFloatingWarning MoonflyYellow
-    highlight! link LspDiagnosticsFloatingInformation MoonflySky
-    highlight! link LspDiagnosticsFloatingHint MoonflyWhite
-    highlight! link LspSignatureActiveParameter MoonflyVisual
 endif
 
 " Neovim only plugins
@@ -1127,6 +1106,23 @@ if has('nvim')
     highlight! link DashboardFooter MoonflyCoral
     highlight! link DashboardHeader MoonflyBlue
     highlight! link DashboardShortCut MoonflyTurquoise
+
+    " nvim-notify
+    highlight! link NotifyERRORBorder FloatBorder
+    highlight! link NotifyWARNBorder FloatBorder
+    highlight! link NotifyINFOBorder FloatBorder
+    highlight! link NotifyDEBUGBorder FloatBorder
+    highlight! link NotifyTRACEBorder FloatBorder
+    highlight! link NotifyERRORIcon MoonflyRed
+    highlight! link NotifyWARNIcon MoonflyYellow
+    highlight! link NotifyINFOIcon MoonflyBlue
+    highlight! link NotifyDEBUGIcon MoonflyGrey246
+    highlight! link NotifyTRACEIcon MoonflyPurple
+    highlight! link NotifyERRORTitle MoonflyRed
+    highlight! link NotifyWARNTitle MoonflyYellow
+    highlight! link NotifyINFOTitle MoonflyBlue
+    highlight! link NotifyDEBUGTitle MoonflyGrey246
+    highlight! link NotifyTRACETitle MoonflyPurple
 endif
 
 set background=dark
